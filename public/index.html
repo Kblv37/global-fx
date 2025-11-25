@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Продвинутый Конвертер Валют</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Продвинутый конвертер валют с темной/светлой темой, историей операций, поиском валюты по стране и графиком курса."
+  />
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Chart.js CDN (минимальная внешняя зависимость) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+    defer
+  ></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="module" src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1 class="app-title">Продвинутый Конвертер Валют</h1>
+        <p class="app-subtitle">
+          Конвертация, поиск по стране, история и график курса в одном интерфейсе.
+        </p>
+      </div>
+      <button class="theme-toggle" style="display: none;" id="themeToggle" aria-label="Сменить тему">
+        <span class="theme-toggle-icon" id="themeToggleIcon"></span>
+        <span class="theme-toggle-label">Тема</span>
+      </button>
+    </header>
+
+    <!-- Main layout -->
+    <main class="app-main">
+      <!-- Converter card -->
+      <section class="card card-main" aria-label="Конвертер валют">
+        <h2 class="card-title">Конвертер</h2>
+        <form id="converterForm" class="converter-form" autocomplete="off">
+          <div class="form-group">
+            <label for="amount" class="form-label">Сумма</label>
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="0.01"
+              class="input"
+              placeholder="Например, 100"
+              required
+            />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fromCurrency" class="form-label">Из валюты</label>
+              <select id="fromCurrency" name="fromCurrency" class="select"></select>
+            </div>
+            <button
+              type="button"
+              class="swap-btn"
+              id="swapButton"
+              aria-label="Поменять валюты местами"
+            >
+              ⇄
+            </button>
+            <div class="form-group">
+              <label for="toCurrency" class="form-label">В валюту</label>
+              <select id="toCurrency" name="toCurrency" class="select"></select>
+            </div>
+          </div>
+
+          <div class="result-panel" aria-live="polite">
+            <p class="result-label">Результат</p>
+            <p class="result-value" id="resultValue">—</p>
+            <p class="result-meta" id="resultMeta">Курс будет загружен...</p>
+          </div>
+        </form>
+      </section>
+
+      <!-- Side column: search + chart + history -->
+      <section class="side-column">
+        <!-- Search by country -->
+        <section class="card" aria-label="Поиск валюты по стране">
+          <h2 class="card-title">Валюта по стране</h2>
+          <div class="form-group">
+            <label for="countrySearch" class="form-label">Страна</label>
+            <input
+              id="countrySearch"
+              type="text"
+              class="input"
+              placeholder="Например, Japan"
+              autocomplete="off"
+            />
+          </div>
+          <p class="hint">
+            Начните вводить название страны. При совпадении валюта обновится автоматически.
+          </p>
+          <div id="countryMatchInfo" class="country-info"></div>
+        </section>
+
+        <!-- Chart -->
+        <section class="card" aria-label="График курса валюты">
+          <h2 class="card-title">Динамика курса</h2>
+          <p class="hint">
+            График показывает условную динамику курса за последние 7 дней.
+            Код готов к подключению реального API.
+          </p>
+          <div class="chart-container">
+            <canvas id="rateChart"></canvas>
+          </div>
+        </section>
+      </section>
+
+      <!-- History -->
+      <section class="card card-history" aria-label="История конвертаций">
+        <div class="card-header-row">
+          <h2 class="card-title">История конвертаций</h2>
+          <div class="history-actions">
+            <button class="btn-secondary" id="exportCsvButton" type="button">
+              Экспорт в CSV
+            </button>
+            <button class="btn-secondary danger" id="clearHistoryButton" type="button">
+              Очистить
+            </button>
+          </div>
+        </div>
+        <ul id="historyList" class="history-list"></ul>
+        <p id="historyEmptyState" class="empty-state">
+          История пока пуста. Совершите первую конвертацию.
+        </p>
+      </section>
+    </main>
+
+    <!-- Bottom bar for theme on mobile -->
+    <footer class="app-footer">
+      <button class="theme-toggle theme-toggle-footer" id="themeToggleFooter">
+        <span class="theme-toggle-icon"></span>
+        <span class="theme-toggle-label">Сменить тему</span>
+      </button>
+      <span class="footer-note">Курсы основаны на данных API. Значения могут отличаться от банковских.</span>
+    </footer>
+  </div>
+</body>
+</html>
